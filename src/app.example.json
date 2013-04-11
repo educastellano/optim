@@ -1,0 +1,10 @@
+{
+    "app": "example",
+    "output": "build/",
+    "version": "1",
+    "basepath": "./",
+    "files": [
+	"jquery-1.9.1.min.js",
+	"app.js"
+    ]
+}
