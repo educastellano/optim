@@ -1,0 +1,12 @@
+{
+    "version": "1",
+    "basepath": "../../",
+    "minified_file": "build/app.min.js",
+    "files": [
+	    "/static/lib/jquery-1.9.1.min.js",
+        "/static/app/file1.js",
+        "/static/app/file2.js",
+        "/static/app/file3.js",
+	    "/static/app/file4.js"
+    ]
+}

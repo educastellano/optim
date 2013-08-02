@@ -57,11 +57,11 @@
     var json_config,
         config;
 
-    json_config = loadSync(root.__app_settings__.config_file);
+    json_config = loadSync(root.__optim_file__);
     if (json_config) {
         config = JSON.parse(json_config);
         if (window.location.hostname.indexOf('localhost') === -1) {
-            loadScript(root.__app_settings__.minify_file + '?v=' + config.version);
+            loadScript(config.minified_file + '?v=' + config.version);
         }
         else {
             loadAllScripts(config.files, 0);

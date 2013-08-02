@@ -17,8 +17,7 @@ def loadConf(json_file):
     path = path[:len(path)-1]
     absPathJsonFile = '/'.join(path)
     absPath = absPathJsonFile + '/' + conf['basepath']
-    slash = '' if conf['output'][len(conf['output'])-1] == '/' else '/'
-    absPathOutput = absPathJsonFile + '/' + conf['output'] + slash + conf['app']
+    absPathOutput = absPathJsonFile + '/build/app'
     absPathAll = absPathOutput + '.all.js'
     absPathMin = absPathOutput + '.min.js'
 
@@ -32,14 +31,27 @@ def join():
     fileOut.write(code)
     fileOut.close()
 
-def minify():
-    os.system('java -jar yuicompressor-2.4.2.jar ' + absPathAll + ' -o ' + absPathMin)
+def minify(tool):
+    if tool == 'yui':
+        os.system('java -jar yuicompressor-2.4.2.jar %s -o %s' % (absPathAll, absPathMin))
+    elif tool == 'uglify':
+        os.system('uglifyjs %s > %s ' % (absPathAll, absPathMin))
+    elif tool == 'nocompress':
+        os.system('cp %s %s' % (absPathAll, absPathMin))
+    else:
+        exit(tool + ' not supported')
 
-if len(sys.argv) > 1:
-    loadConf(sys.argv[1])
-    join()
-    minify()
-else:
-    usage()
+def main():
+    if len(sys.argv) > 1:
+        loadConf(sys.argv[1])
+        join()
+        if len(sys.argv) > 2:
+            minify_tool = sys.argv[2]
+        else:
+            minify_tool = 'yui'
+        minify(minify_tool)
+    else:
+        usage()
 
-
+if __name__ == '__main__':
+    main()
