@@ -3,14 +3,15 @@ import sys
 import json
 
 def usage():
-    print 'usage: ' + os.path.basename(__file__) + ' json_file'
+    print 'usage: ' + os.path.basename(__file__) + ' json_file [tool]'
+    print '  > tool = yui | uglifyjs | nocompress (default)'
 
 def loadConf(json_file):
     global conf, absPath, absPathAll, absPathMin
     # Load File
-    file = open(json_file)
-    conf = json.load(file)
-    file.close()
+    _file = open(json_file)
+    conf = json.load(_file)
+    _file.close()
     # Get absolute path of the json file
     absJsonFile = os.path.abspath(json_file)
     path = absJsonFile.split('/')
@@ -24,10 +25,10 @@ def loadConf(json_file):
 def join():
     fileOut = open(absPathAll, 'w')
     code = ''
-    for file in conf['files']:
-        file = open(absPath + file, 'r')
-        code += file.read() + '\n'
-        file.close()
+    for _file in conf['files']:
+        _file = open(absPath + _file, 'r')
+        code += _file.read() + '\n'
+        _file.close()
     fileOut.write(code)
     fileOut.close()
 
@@ -45,10 +46,7 @@ def main():
     if len(sys.argv) > 1:
         loadConf(sys.argv[1])
         join()
-        if len(sys.argv) > 2:
-            minify_tool = sys.argv[2]
-        else:
-            minify_tool = 'yui'
+        minify_tool = sys.argv[2] if len(sys.argv) > 2 else 'nocompress'
         minify(minify_tool)
     else:
         usage()
