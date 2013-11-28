@@ -3,30 +3,34 @@ import sys
 import json
 
 def usage():
-    print 'usage: ' + os.path.basename(__file__) + ' json_file [tool]'
-    print '  > tool = yui | uglifyjs | nocompress (default)'
+    print '> usage: ' + os.path.basename(__file__) + ' json_file [tool]'
+    print ''
+    print '     tool => [ yui | uglifyjs | nocompress (default) ]'
+    print ''
 
 def loadConf(json_file):
-    global conf, absPath, absPathAll, absPathMin
+    global conf, path_base, path_all, path_min
     # Load File
     _file = open(json_file)
     conf = json.load(_file)
     _file.close()
     # Get absolute path of the json file
-    absJsonFile = os.path.abspath(json_file)
-    path = absJsonFile.split('/')
-    path = path[:len(path)-1]
-    absPathJsonFile = '/'.join(path)
-    absPath = absPathJsonFile + '/' + conf['basepath']
-    absPathOutput = absPathJsonFile + '/build/app'
-    absPathAll = absPathOutput + '.all.js'
-    absPathMin = absPathOutput + '.min.js'
+    abs_conf_file = os.path.abspath(json_file)
+    path_aux = abs_conf_file.split('/')
+    path_aux = path_aux[:len(path_aux)-1]
+    path = '/'.join(path_aux)
+    path_base = path + '/' + conf['base']
+    path_output = path + '/' + conf['output']
+    path_base = path_base if path_base.endswith('/') else path_base + '/'
+    path_output = path_output if path_output.endswith('/') else path_output + '/'
+    path_all = path_output + 'app.all.js'
+    path_min = path_output + 'app.min.js'
 
 def join():
-    fileOut = open(absPathAll, 'w')
+    fileOut = open(path_all, 'w')
     code = ''
     for _file in conf['files']:
-        _file = open(absPath + _file, 'r')
+        _file = open(path_base + _file, 'r')
         code += _file.read() + '\n'
         _file.close()
     fileOut.write(code)
@@ -34,11 +38,11 @@ def join():
 
 def minify(tool):
     if tool == 'yui':
-        os.system('java -jar yuicompressor-2.4.2.jar %s -o %s' % (absPathAll, absPathMin))
-    elif tool == 'uglify':
-        os.system('uglifyjs %s > %s ' % (absPathAll, absPathMin))
+        os.system('java -jar yuicompressor-2.4.2.jar %s -o %s' % (path_all, path_min))
+    elif tool == 'uglifyjs':
+        os.system('uglifyjs %s > %s ' % (path_all, path_min))
     elif tool == 'nocompress':
-        os.system('cp %s %s' % (absPathAll, absPathMin))
+        os.system('cp %s %s' % (path_all, path_min))
     else:
         exit(tool + ' not supported')
 

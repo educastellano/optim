@@ -6,7 +6,8 @@
     //
     var loadScript,
         loadSync,
-        loadAllScripts;
+        loadAllScripts,
+        endsWith;
 
     loadScript = function (url, callback) {
         var head,
@@ -51,17 +52,34 @@
             });
         }
     };
+
+    endsWith = function (str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
     
     // Load the script(s)
     //
     var json_config,
-        config;
+        config,
+        scripts = document.getElementsByTagName('script'),
+        data_optim,
+        i,
+        minified_file;
 
-    json_config = loadSync(root.__optim_file__);
+    for (i=0; i<scripts.length; i++) {
+        data_optim = scripts[i].getAttribute('data-optim');
+        if (data_optim) {
+            json_config = loadSync(data_optim);
+            break;
+        }
+    }
+
     if (json_config) {
         config = JSON.parse(json_config);
         if (window.location.hostname.indexOf('localhost') === -1) {
-            loadScript(config.minified_file + '?v=' + config.version);
+            minified_file = endsWith(config.output, '/') ? config.output : config.output + '/'
+            minified_file += 'app.min.js'
+            loadScript(minified_file + '?v=' + config.version);
         }
         else {
             loadAllScripts(config.files, 0);

@@ -1,0 +1,10 @@
+{
+    "version": "1",
+    "base": "./",
+    "output": "./build",
+    "files": [
+        "/js/file1.js",
+        "/js/file2.js",
+        "/js/file3.js"
+    ]
+}

@@ -8,27 +8,24 @@ Combine and minify js files.
 
 Create a .json configuration file:
 
- 	{
-    	"version": "1",
-	    "basepath": "../../",
-    	"minified_file": "build/app.min.js",
+	{
+	    "version": "1",
+	    "base": "./",
+	    "output": "./build",
 	    "files": [
-        	"/static/app/file1.js",
-			"/static/app/file2.js",
-	        "/static/app/file3.js"
-    	]
+	        "/js/file1.js",
+	        "/js/file2.js",
+	        "/js/file3.js"
+	    ]
 	}
 
-Include the .json file path in a global variable called "\__optim_file__", and the optim lib:
+Include the optim lib with the .json file in its attribute "data-optim":
 
 	<html>
 	<head></head>
-	<body>
+	<body>	
 		<!-- app ui here -->
-		<script>
-        	window.__optim_file__ = '/static/app/config.json';
-		</script>
-		<script src="/static/lib/optim.min.js"></script>
+		<script data-optim="config.json" src="/static/lib/optim.min.js"></script>
 	</body>
 	</html>
 
