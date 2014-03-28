@@ -30,7 +30,9 @@ def join():
     fileOut = open(path_all, 'w')
     code = ''
     for _file in conf['files']:
-        _file = open(path_base + _file, 'r')
+	path = path_base + _file
+	path = path.replace('//', '/')
+        _file = open(path, 'r')
         code += _file.read() + '\n'
         _file.close()
     fileOut.write(code)
