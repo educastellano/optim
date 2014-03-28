@@ -20,11 +20,12 @@ def loadConf(json_file):
     path_aux = path_aux[:len(path_aux)-1]
     path = '/'.join(path_aux)
     path_base = path + '/' + conf['base']
-    path_output = path + '/' + conf['output']
     path_base = path_base if path_base.endswith('/') else path_base + '/'
+    path_output = path_base + conf['output']
     path_output = path_output if path_output.endswith('/') else path_output + '/'
+    path_output = path_output.replace('//', '/')
     if not os.path.exists(path_output):
-    	os.makedirs(path_output)
+        os.makedirs(path_output)
     path_all = path_output + 'app.all.js'
     path_min = path_output + 'app.min.js'
 
